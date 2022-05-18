@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "647169473197",
+    "project_id": "pinote-chat-app",
+    "storage_bucket": "pinote-chat-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:647169473197:android:359df9b3416495511d2424",
+        "android_client_info": {
+          "package_name": "com.example.chat_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "647169473197-6epi0ojta5qhscf37875els7178v9b2s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYUinOZvojrsKctHujJyQ7b-plDmePLbw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "647169473197-6epi0ojta5qhscf37875els7178v9b2s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "647169473197-lvbd5uvevorfqfutfb2fj0ga3rghrbnq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chatApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
