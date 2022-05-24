@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 class ChatController with ChangeNotifier {
   ChatMessage ?chatMessage;
+  
   late StreamSubscription _chatSub;
   List<ChatMessage> chats = [];
 
@@ -33,6 +34,7 @@ class ChatController with ChangeNotifier {
     // print(message.doc().);
     chatMessage?.updateDetails(newDetails);
   }
+  
 
   Future sendMessage({required String message}) {
     return FirebaseFirestore.instance.collection('chats').add(ChatMessage(

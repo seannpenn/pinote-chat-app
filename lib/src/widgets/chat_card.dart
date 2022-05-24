@@ -1,3 +1,4 @@
+import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -5,28 +6,35 @@ import 'package:flutter/material.dart';
 import '../models/chat_message_model.dart';
 
 class ChatCard extends StatelessWidget {
-
   final Function()? onLongPress;
+  final Function()? onTap;
 
-  const ChatCard({
-    Key? key,
-    required this.chat,
-    this.onLongPress,
-  }) : super(key: key);
+  ChatCard({Key? key, required this.chat, this.onLongPress, this.onTap})
+      : super(key: key);
 
+  final ChatController _chatController = ChatController();
   final ChatMessage chat;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: onLongPress,
+      onTap: onTap,
       child: Container(
-        margin: EdgeInsets.only(left:chat.sentBy ==FirebaseAuth.instance.currentUser?.uid ? 60: 10, bottom: 10, top: 10, right: chat.sentBy ==FirebaseAuth.instance.currentUser?.uid ? 10: 60),
+        margin: EdgeInsets.only(
+            left:
+                chat.sentBy == FirebaseAuth.instance.currentUser?.uid ? 60 : 10,
+            bottom: 10,
+            top: 10,
+            right: chat.sentBy == FirebaseAuth.instance.currentUser?.uid
+                ? 10
+                : 60),
         padding: const EdgeInsets.all(8),
-        
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(8)),
-          color: chat.sentBy ==FirebaseAuth.instance.currentUser?.uid ? Colors.white: Colors.yellow,
+          color: chat.sentBy == FirebaseAuth.instance.currentUser?.uid
+              ? Colors.white
+              : Colors.yellow,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -41,7 +49,9 @@ class ChatCard extends StatelessWidget {
           children: [
             Flexible(
               child: Container(
-                color: chat.sentBy ==FirebaseAuth.instance.currentUser?.uid ? Colors.white: Colors.yellow,
+                color: chat.sentBy == FirebaseAuth.instance.currentUser?.uid
+                    ? Colors.white
+                    : Colors.yellow,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -58,17 +68,18 @@ class ChatCard extends StatelessWidget {
                           return const Text('User');
                         }),
                     Text(chat.message),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                      // Text(chat.ts.toDate().toString())
-                      Text(chat.dateFormatter(chat.ts.toDate()))
-                    ],),
-                    // Text(
-                    //     'Message seen by ${chat.seenBy}')
+
+                    //'Message seen by ${chat.seenBy}')
                   ],
                 ),
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                
+                Text(chat.tapped ? chat.dateFormatter(chat.ts.toDate()) : '')
+              ],
             ),
           ],
         ),

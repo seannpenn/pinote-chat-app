@@ -5,6 +5,7 @@ class ChatMessage {
   late String message;
   final String uid, sentBy, seenBy;
   late Timestamp ts;
+  bool tapped = false;
 
   ChatMessage(
       {this.uid = '', required this.sentBy, this.seenBy = '', this.message = '', Timestamp? ts})
@@ -47,7 +48,11 @@ class ChatMessage {
 
 
     updateDetails(String update){
-    message = update;
-    ts = Timestamp.now();
+      message = update;
+      ts = Timestamp.now();
+    }
+
+    showTimeDate(){
+    tapped = !tapped;
   }
 }

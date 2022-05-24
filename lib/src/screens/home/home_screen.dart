@@ -110,6 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _messageController = TextEditingController();
   final FocusNode _messageFN = FocusNode();
   final ScrollController _scrollController = ScrollController();
+  ChatCard? card;
 
   ChatUser? user;
   @override
@@ -176,7 +177,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // showEditDialog(context, chat);
                                 showMessageOptions();
                               },
-                            )
+                              onTap: (){
+                                setState(() {
+                                  chat.showTimeDate();
+                                });
+                                
+                                print('tapped');
+                              },
+                            ),
+                            
                         ],
                       ),
                     );
