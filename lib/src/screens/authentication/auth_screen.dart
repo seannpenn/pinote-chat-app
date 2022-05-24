@@ -286,7 +286,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                                   child: Icon(
                                                     Icons.lock,
                                                     color:
-                                                        _passCon.text.isEmpty
+                                                        _emailCon.text.isEmpty
                                                             ? Colors.black
                                                             : Colors.teal[400],
                                                   ),
