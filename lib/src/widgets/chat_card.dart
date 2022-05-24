@@ -77,7 +77,12 @@ class ChatCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                
+                if (chat.sentBy == FirebaseAuth.instance.currentUser?.uid)
+                  Text(chat.edited ? 'edited' : ''),
+                  
+                const SizedBox(
+                  width: 10,
+                ),
                 Text(chat.tapped ? chat.dateFormatter(chat.ts.toDate()) : '')
               ],
             ),

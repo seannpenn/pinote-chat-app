@@ -25,15 +25,6 @@ class ChatController with ChangeNotifier {
     chats = update;
     notifyListeners();
   }
-  // updateMessage(String newDetails) {
-  //   chatMessage?.updateDetails(newDetails);
-  //   notifyListeners();
-  // }
-  Future updateMessage(String newDetails) async {
-    // FirebaseFirestore.instance.collection('chats').doc().update();
-    // print(message.doc().);
-    chatMessage?.updateDetails(newDetails);
-  }
   
 
   Future sendMessage({required String message}) {

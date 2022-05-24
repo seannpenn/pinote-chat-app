@@ -2,11 +2,11 @@ import 'package:chat_app/src/models/chat_message_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
 class InputWidget extends StatefulWidget {
   final String? current;
+  final ChatMessage chat;
 
-  const InputWidget({this.current, Key? key}) : super(key: key);
+  const InputWidget({this.current, required this.chat, Key? key}) : super(key: key);
 
   @override
   State<InputWidget> createState() => _InputWidgetState();
@@ -14,8 +14,8 @@ class InputWidget extends StatefulWidget {
 
 class _InputWidgetState extends State<InputWidget> {
   final TextEditingController _tCon = TextEditingController();
-
   String? get current => widget.current;
+  ChatMessage get chat => widget.chat;
 
   @override
   void initState() {
@@ -42,7 +42,7 @@ class _InputWidgetState extends State<InputWidget> {
             TextFormField(
               controller: _tCon,
               validator: (value) {
-                if (value == null || value.isEmpty || value.trim().isEmpty ) {
+                if (value == null || value.isEmpty || value.trim().isEmpty) {
                   return 'Please enter some text';
                 }
                 return null;
@@ -52,7 +52,9 @@ class _InputWidgetState extends State<InputWidget> {
               onPressed: (_formKey.currentState?.validate() ?? false)
                   ? () {
                       if (_formKey.currentState?.validate() ?? false) {
-                        Navigator.of(context).pop(ChatMessage(sentBy: FirebaseAuth.instance.currentUser!.uid, message: _tCon.text));
+
+                        chat.updateDetails(_tCon.text);
+                        Navigator.of(context).pop();
                       }
                     }
                   : null,

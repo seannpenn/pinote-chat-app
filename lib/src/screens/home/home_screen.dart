@@ -1,88 +1,3 @@
-// import 'package:chat_app/models/chat_user_model.dart';
-// import 'package:chat_app/src/controllers/chat_controller.dart';
-// import 'package:flutter/material.dart';
-
-// import '../../../service_locators.dart';
-// import '../../controllers/auth_controller.dart';
-
-// class HomeScreen extends StatefulWidget {
-//   static const String route = 'home-screen';
-//   const HomeScreen({Key? key}) : super(key: key);
-
-//   @override
-//   State<HomeScreen> createState() => _HomeScreenState();
-// }
-
-// class _HomeScreenState extends State<HomeScreen> {
-//   final AuthController _auth = locator<AuthController>();
-//   final ChatController _chatController = ChatController();
-
-//   final TextEditingController _messageController = TextEditingController();
-//   final FocusNode _messageFN = FocusNode();
-//   final ScrollController _scrollController = ScrollController();
-
-//   ChatUser? user;
-//   @override
-//   void initState() {
-//     ChatUser.fromUid(uid: _auth.currentUser!.uid).then((value) {
-//       if (mounted) {
-//         setState(() {
-//           user = value;
-//         });
-//       }
-//     });
-//     _chatController.addListener(scrollToBottom);
-
-//     super.initState();
-//   }
-
-//   @override
-//   void dispose() {
-//     _chatController.removeListener(scrollToBottom);
-//     _messageFN.dispose();
-//     _messageController.dispose();
-//     _chatController.dispose();
-//     super.dispose();
-//   }
-
-//   scrollToBottom() async {
-//     await Future.delayed(const Duration(milliseconds: 250));
-//     print('scrolling to bottom');
-//     _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-//         curve: Curves.easeIn, duration: const Duration(milliseconds: 250));
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Chatting from ${user?.username ?? '...'}'),
-//         actions: [
-//           IconButton(
-//             onPressed: () {
-//               _auth.logout();
-//             },
-//             icon: const Icon(Icons.logout),
-//           ),
-//         ],
-//       ),
-//       body: Center(
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             const Text('Signed in'),
-//             IconButton(
-//                 onPressed: () async {
-//                   _auth.logout();
-//                 },
-//                 icon: const Icon(Icons.logout)),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:chat_app/src/controllers/auth_controller.dart';
 import 'package:chat_app/src/controllers/chat_controller.dart';
 import 'package:chat_app/src/models/chat_user_model.dart';
@@ -174,18 +89,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             ChatCard(
                               chat: chat,
                               onLongPress: () {
-                                // showEditDialog(context, chat);
-                                showMessageOptions();
+                                showMessageOptions(context, chat);
                               },
-                              onTap: (){
+                              onTap: () {
                                 setState(() {
-                                  chat.showTimeDate();
+                                  chat.showMessageDetails();
                                 });
-                                
+                                // chat.updateDetails('Hello oy updated ni');
+
                                 print('tapped');
                               },
                             ),
-                            
                         ],
                       ),
                     );
@@ -253,43 +167,110 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: InputWidget(
               current: chatMessage.message,
+              chat: chatMessage,
             ),
           );
         });
-    if (result != null) {
-      _chatController.updateMessage(result.message);
-    }
+
+    // if (result != null) {
+    //   _chatController.updateMessage(result.message);
+    // }
   }
 
-  showMessageOptions() {
+  showMessageOptions(BuildContext context, ChatMessage chatMessage) {
+    if (chatMessage.sentBy == FirebaseAuth.instance.currentUser?.uid) {
+      showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return Align(
+              child: AlertDialog(
+                contentPadding:
+                    const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
+                content: Column(
+                  // mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: Colors.blue, width: 2),
+                              ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            showEditDialog(context, chatMessage);
+                          },
+                          child: const Text('Edit')),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                              side: const BorderSide(color: Colors.blue, width: 2),
+                              ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          confirmDeleteDialog(context, chatMessage);
+                          
+                        },
+                        child: const Text('Delete'),
+                      ),
+                    )
+                  ],
+                ),
+                // Row(
+                //   children: [
+
+                //   ],
+                // )
+              ),
+            );
+          });
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext ctx) {
+            return AlertDialog(
+              actions: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text('You dont have permission on this message'),
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Ok'))
+              ],
+            );
+          });
+    }
+  }
+  void confirmDeleteDialog(BuildContext context, ChatMessage chatMessage) {
     showDialog(
         context: context,
         builder: (BuildContext ctx) {
-          return Align(
-            child: AlertDialog(
-              contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
-              actions: [
-                Row(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  // mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Edit')),
-                  ],
-                ),
-                Row(
-                  children: [
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text('Delete'),
-                    )
-                  ],
-                )
-              ],
-            ),
+          return AlertDialog(
+            title: const Text('Please Confirm'),
+            content: const Text('Delete this message?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Remove the box
+                    chatMessage.deleteMessage();
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Yes')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+
+                  },
+                  child: const Text('No'))
+            ],
           );
         });
   }

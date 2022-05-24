@@ -6,9 +6,10 @@ class ChatMessage {
   final String uid, sentBy, seenBy;
   late Timestamp ts;
   bool tapped = false;
+  final bool edited;
 
   ChatMessage(
-      {this.uid = '', required this.sentBy, this.seenBy = '', this.message = '', Timestamp? ts})
+      {this.edited = false,this.uid = '', required this.sentBy, this.seenBy = '', this.message = '', Timestamp? ts})
       : ts = ts ?? Timestamp.now();
 
   String dateFormatter(DateTime dt){
@@ -22,6 +23,7 @@ class ChatMessage {
     return ChatMessage(
       uid: snap.id,
       sentBy: json['sentBy'] ?? '',
+      edited: json['edited'] ?? false,
       seenBy: json['seenBy']?? '',
       message: json['message'] ?? '',
       ts: json['ts'] ?? Timestamp.now(),
@@ -29,7 +31,7 @@ class ChatMessage {
   }
 
   Map<String, dynamic> get json =>
-      {'sentBy': sentBy, 'seenBy': seenBy, 'message': message, 'ts': ts};
+      {'sentBy': sentBy, 'seenBy': seenBy, 'message': message, 'ts': ts, 'edited': edited};
 
   static List<ChatMessage> fromQuerySnap(QuerySnapshot snap) {
     try {
@@ -48,11 +50,15 @@ class ChatMessage {
 
 
     updateDetails(String update){
-      message = update;
-      ts = Timestamp.now();
+      FirebaseFirestore.instance.collection('chats').doc(uid).update({'message':update, 'edited': true});
+      print('done update');
+    }
+    deleteMessage(){
+      FirebaseFirestore.instance.collection('chats').doc(uid).delete();
+      print('message with $uid is deleted.');
     }
 
-    showTimeDate(){
-    tapped = !tapped;
-  }
+    showMessageDetails(){
+      tapped = !tapped;
+    }
 }
