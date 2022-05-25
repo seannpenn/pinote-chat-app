@@ -14,27 +14,31 @@ class ChatCard extends StatelessWidget {
 
   final ChatController _chatController = ChatController();
   final ChatMessage chat;
-
-  @override
+  final String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
   Widget build(BuildContext context) {
     return GestureDetector(
       onLongPress: onLongPress,
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.only(
-            left:
-                chat.sentBy == FirebaseAuth.instance.currentUser?.uid ? 60 : 10,
+            left: chat.sentBy == currentUserId ? 60 : 10,
             bottom: 10,
             top: 10,
-            right: chat.sentBy == FirebaseAuth.instance.currentUser?.uid
-                ? 10
-                : 60),
+            right: chat.sentBy == currentUserId ? 10 : 60),
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          color: chat.sentBy == FirebaseAuth.instance.currentUser?.uid
-              ? Colors.white
-              : Colors.yellow,
+          borderRadius: BorderRadius.only(
+              topLeft: chat.sentBy == currentUserId
+                  ? const Radius.circular(24)
+                  : const Radius.circular(0),
+              bottomLeft: chat.sentBy == currentUserId
+                  ? const Radius.circular(24)
+                  : const Radius.circular(24),
+              bottomRight: const Radius.circular(24),
+              topRight: chat.sentBy == currentUserId
+                  ? const Radius.circular(0)
+                  : const Radius.circular(24)),
+          color: chat.sentBy == currentUserId ? Colors.teal[400] : Colors.white,
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.5),
@@ -49,9 +53,9 @@ class ChatCard extends StatelessWidget {
           children: [
             Flexible(
               child: Container(
-                color: chat.sentBy == FirebaseAuth.instance.currentUser?.uid
-                    ? Colors.white
-                    : Colors.yellow,
+                padding: const EdgeInsets.only(left: 15, top: 5),
+                color:
+                    chat.sentBy == currentUserId ? Colors.teal[400] : Colors.white,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -60,10 +64,15 @@ class ChatCard extends StatelessWidget {
                         future: ChatUser.fromUid(uid: chat.sentBy),
                         builder: (context, AsyncSnapshot<ChatUser> snap) {
                           if (snap.hasData) {
-                            return Text(chat.sentBy ==
-                                    FirebaseAuth.instance.currentUser?.uid
+                            if(chat.message == 'You deleted a message.'){
+                              return const Text('');
+                            }
+                            else{
+                              return Text(chat.sentBy == currentUserId
                                 ? 'You sent:'
                                 : '${snap.data?.username} sent');
+                            }
+                            
                           }
                           return const Text('User');
                         }),
@@ -77,9 +86,8 @@ class ChatCard extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                if (chat.sentBy == FirebaseAuth.instance.currentUser?.uid)
+                if (chat.sentBy == currentUserId)
                   Text(chat.edited ? 'edited' : ''),
-                  
                 const SizedBox(
                   width: 10,
                 ),

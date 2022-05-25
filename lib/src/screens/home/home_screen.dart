@@ -64,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text('Chatting from ${user?.username ?? '...'}'),
+        backgroundColor: Colors.teal[400],
         actions: [
           IconButton(
               onPressed: () {
@@ -142,10 +143,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  testPrint() {
-    print('Hello onlongpress is working!!');
-  }
-
   send() {
     _messageFN.unfocus();
     if (_messageController.text.isNotEmpty) {
@@ -182,48 +179,44 @@ class _HomeScreenState extends State<HomeScreen> {
       showDialog(
           context: context,
           builder: (BuildContext ctx) {
-            return Align(
-              child: AlertDialog(
-                contentPadding:
-                    const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
-                content: Column(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      child: OutlinedButton(
-                          style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Colors.blue, width: 2),
-                              ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            showEditDialog(context, chatMessage);
-                          },
-                          child: const Text('Edit')),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      child: OutlinedButton(
+            return AlertDialog(
+              contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
+              content: Column(
+                // mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Colors.blue, width: 2),
-                              ),
+                          side: const BorderSide(color: Colors.blue, width: 2),
+                        ),
                         onPressed: () {
                           Navigator.of(context).pop();
-                          confirmDeleteDialog(context, chatMessage);
-                          
+                          showEditDialog(context, chatMessage);
                         },
-                        child: const Text('Delete'),
+                        child: const Text('Edit')),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.blue, width: 2),
                       ),
-                    )
-                  ],
-                ),
-                // Row(
-                //   children: [
-
-                //   ],
-                // )
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        confirmDeleteDialog(context, chatMessage);
+                      },
+                      child: const Text('Delete'),
+                    ),
+                  )
+                ],
               ),
+              // Row(
+              //   children: [
+
+              //   ],
+              // )
             );
           });
     } else {
@@ -231,11 +224,8 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           builder: (BuildContext ctx) {
             return AlertDialog(
+              content: const Text('You dont have permission on this message.'),
               actions: [
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('You dont have permission on this message'),
-                ),
                 TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -246,6 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
     }
   }
+
   void confirmDeleteDialog(BuildContext context, ChatMessage chatMessage) {
     showDialog(
         context: context,
@@ -254,7 +245,13 @@ class _HomeScreenState extends State<HomeScreen> {
             title: const Text('Please Confirm'),
             content: const Text('Delete this message?'),
             actions: [
-              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('No')),
+                // The "Yes" button
               TextButton(
                   onPressed: () {
                     // Remove the box
@@ -263,13 +260,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     Navigator.of(context).pop();
                   },
                   child: const Text('Yes')),
-              TextButton(
-                  onPressed: () {
-                    // Close the dialog
-                    Navigator.of(context).pop();
-
-                  },
-                  child: const Text('No'))
             ],
           );
         });
