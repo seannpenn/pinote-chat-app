@@ -18,7 +18,7 @@ class ChatMessage {
       : ts = ts ?? Timestamp.now();
 
   String dateFormatter(DateTime dt) {
-    final DateFormat formatter = DateFormat.yMd().add_jm();
+    final DateFormat formatter = DateFormat.yMMMMd('en_US').add_jm();
     final String formatted = formatter.format(dt);
 
     return formatted;
@@ -71,7 +71,7 @@ class ChatMessage {
     FirebaseFirestore.instance
         .collection('chats')
         .doc(uid)
-        .update({'message': 'You deleted a message.'});
+        .update({'message': 'Message Deleted.'});
     print('message with $uid is deleted.');
   }
 

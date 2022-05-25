@@ -6,7 +6,8 @@ class InputWidget extends StatefulWidget {
   final String? current;
   final ChatMessage chat;
 
-  const InputWidget({this.current, required this.chat, Key? key}) : super(key: key);
+  const InputWidget({this.current, required this.chat, Key? key})
+      : super(key: key);
 
   @override
   State<InputWidget> createState() => _InputWidgetState();
@@ -39,6 +40,7 @@ class _InputWidgetState extends State<InputWidget> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text('Edit Message'),
+            const SizedBox(height: 15,),
             TextFormField(
               controller: _tCon,
               validator: (value) {
@@ -47,12 +49,19 @@ class _InputWidgetState extends State<InputWidget> {
                 }
                 return null;
               },
+              decoration: const InputDecoration(
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(8),
+                  ),
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: (_formKey.currentState?.validate() ?? false)
                   ? () {
                       if (_formKey.currentState?.validate() ?? false) {
-
                         chat.updateDetails(_tCon.text);
                         Navigator.of(context).pop();
                       }

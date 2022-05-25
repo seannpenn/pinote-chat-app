@@ -83,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   animation: _chatController,
                   builder: (context, Widget? w) {
                     return SingleChildScrollView(
+                      padding: const EdgeInsets.all(8),
                       controller: _scrollController,
                       child: Column(
                         children: [
@@ -130,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   IconButton(
                     icon: const Icon(
                       Icons.send,
-                      color: Colors.redAccent,
+                      color: Colors.teal,
                     ),
                     onPressed: send,
                   )
