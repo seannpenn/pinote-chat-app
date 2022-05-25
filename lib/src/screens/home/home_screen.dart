@@ -181,16 +181,20 @@ class _HomeScreenState extends State<HomeScreen> {
           context: context,
           builder: (BuildContext ctx) {
             return AlertDialog(
+              
               contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
               content: Column(
                 // mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(40))
+                    ),
                     width: double.infinity,
                     child: OutlinedButton(
                         style: OutlinedButton.styleFrom(
-                          side: const BorderSide(color: Colors.blue, width: 2),
+                          side: const BorderSide(color: Colors.teal, width: 2),
                         ),
                         onPressed: () {
                           Navigator.of(context).pop();
@@ -202,7 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: double.infinity,
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.blue, width: 2),
+                        side: const BorderSide(color: Colors.teal, width: 2),
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
